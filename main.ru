@@ -19,7 +19,7 @@ class BoardException(Exception):
 
 class BoardOutException(BoardException):
     def __str__(self):
-        return "Вы пытаетесь выстрелить за доску!"
+        return "Вы выстрелили за предел поля!"
 
 
 class BoardUsedException(BoardException):
@@ -40,7 +40,7 @@ class Ship:
 
     @property
     def dots(self):
-        ship_dots = []# создаем список кораблей
+        ship_dots = []
         for i in range(self.l):
             cur_x, cur_y = self.bow.x, self.bow.y
 
@@ -80,12 +80,8 @@ class Board:
         self.ships.append(ship)
         self.contour(ship)
 
-    def contour(self, ship, verb=False):#метод все заняты еточки вокруг корабля
-        dot_near = [
-            (-1, -1), (-1, 0), (-1, 1),
-            (0, -1), (0, 0), (0, 1),
-            (1, -1), (1, 0), (1, 1)
-        ]
+    def contour(self, ship, verb=False):
+        dot_near = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 0), (0, 1), (1, -1), (1, 0), (1, 1)]
         for d in ship.dots:
             for dx, dy in dot_near:
                 cur = Dot(d.x + dx, d.y + dy)
@@ -230,10 +226,10 @@ class Game:
         num = 0
         while True:
             print("_________________________")
-            print("Доска пользователя:")
+            print("Поле пользователя:")
             print(self.us.board)
             print("_________________________")
-            print("Доска компьютера:")
+            print("Поле компьютера:")
             print(self.ai.board)
             if num % 2 == 0:
                 print("_________________________")
@@ -246,12 +242,12 @@ class Game:
             if repeat:
                 num -= 1
 
-            if self.ai.board.count == self.random_board():
+            if self.ai.board.count == 7:
                 print("_________________________")
                 print("Пользователь выиграл!")
                 break
 
-            if self.us.board.count == self.random_board():
+            if self.us.board.count == 7:
                 print("_________________________")
                 print("Компьютер выиграл!")
                 break
